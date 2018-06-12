@@ -1,4 +1,4 @@
 class User < ApplicationRecord
-
-  validates_presence_of :username, :first_name
+    # validations
+    validates_presence_of :username, :password
 end

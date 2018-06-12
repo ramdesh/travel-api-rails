@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Users API', type: :request do
   # initialize test data
-  let!(:users) { create_list(:users, 10) }
+  let!(:users) { create_list(:user, 10) }
   let(:user_id) { users.first.id }
 
   # Test suite for GET /users
@@ -52,7 +52,7 @@ RSpec.describe 'Users API', type: :request do
   # Test suite for POST /users
   describe 'POST /users' do
     # valid payload
-    let(:valid_attributes) { { username: 'Spock', first_name: 'Spock' } }
+    let(:valid_attributes) { { username: 'Spock', password: 'Spock' } }
 
     context 'when the request is valid' do
       before { post '/users', params: valid_attributes }
@@ -75,14 +75,14 @@ RSpec.describe 'Users API', type: :request do
 
       it 'returns a validation failure message' do
         expect(response.body)
-            .to match(/Validation failed: First name can't be blank/)
+            .to match(/Validation failed: Password can't be blank/)
       end
     end
   end
 
   # Test suite for PUT /users/:id
   describe 'PUT /users/:id' do
-    let(:valid_attributes) { { title: 'Shopping' } }
+    let(:valid_attributes) { { role: 'Engineer' } }
 
     context 'when the record exists' do
       before { put "/users/#{user_id}", params: valid_attributes }

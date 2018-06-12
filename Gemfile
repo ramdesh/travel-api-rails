@@ -10,7 +10,7 @@ gem 'sqlite3'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-# gem 'jbuilder', '~> 2.5'
+gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
@@ -40,17 +40,21 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
 group :development, :test do
+  # rspec-rails - Testing framework
   gem 'rspec-rails', '~> 3.5'
 end
 
 group :test do
+  # factory_bot_rails - A fixtures replacement with a more straightforward syntax. You'll see
   gem 'factory_bot_rails', '~> 4.0'
+  # shoulda_matchers - Provides RSpec with additional matchers
   gem 'shoulda-matchers', '~> 3.1'
+  # faker - A library for generating fake data. We'll use this to generate test data
   gem 'faker'
+  # database_cleaner - You guessed it! It literally cleans our test database to ensure a clean state in each test suite
   gem 'database_cleaner'
 end
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
