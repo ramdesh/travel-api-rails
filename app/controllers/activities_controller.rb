@@ -8,11 +8,16 @@ class ActivitiesController < ApplicationController
   end
 
   # POST /activities
+
   def create
     @activity = Activity.create!(activity_params)
     json_response(@activity, :created)
   end
-
+=begin
+  def create
+    Actvity.create(params[:activity])
+  end
+=end
   # GET /activities/:id
   def show
     json_response(@activity)
@@ -21,7 +26,7 @@ class ActivitiesController < ApplicationController
   # PUT /activities/:id
   def update
     @activity.update(activity_params)
-    head :no_content
+    head :no_head
   end
 
   # DELETE /activities/:id

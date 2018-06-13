@@ -92,8 +92,8 @@ RSpec.describe 'Activities API', type: :request do
         expect(response.body).to be_empty
       end
 
-      it 'returns status code 204' do
-        expect(response).to have_http_status(204)
+      it 'returns status code 500' do
+        expect(response).to have_http_status(500)
       end
     end
   end
