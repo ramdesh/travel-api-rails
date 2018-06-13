@@ -9,7 +9,7 @@ class ActivitiesController < ApplicationController
 
   # POST /activities
   def create
-    @activity = Hotel.create!(activity_params)
+    @activity = Activity.create!(activity_params)
     json_response(@activity, :created)
   end
 
