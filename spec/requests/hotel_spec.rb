@@ -67,9 +67,9 @@ RSpec.describe 'Hotels API', type: :request do
     context 'when the request is valid' do
       before { post '/hotels', params: valid_attributes }
 
-    #   it 'creates a hotel' do
-    #     expect(json['name']).to eq('Shangri-La Hotel')
-    #   end
+      it 'creates a hotel' do
+         expect(json['name']).to eq('Shangri-La Hotel')
+      end
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
