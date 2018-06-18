@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   resources :hotels
   resources :activities
   resources :users
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
 end

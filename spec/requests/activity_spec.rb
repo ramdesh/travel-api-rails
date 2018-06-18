@@ -24,7 +24,7 @@ RSpec.describe 'Activities API', type: :request do
   # Test suite for POST /activities
   describe 'POST /activities' do
     # valid payload
-    let(:valid_attributes) { { activity: "{ name: 'Sigiriya' }" } }
+    let(:valid_attributes) { { activity: { name: 'Sigiriya' } } }
 
     context 'when the request is valid' do
       before { post '/activities', params: valid_attributes }

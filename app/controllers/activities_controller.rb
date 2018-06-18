@@ -7,17 +7,17 @@ def index
   json_response(@activities)
 end
 
-def new
-  @activity = Activity.new
+#POST /activities/random
+def create_random
+  RandActivityJob.perform_later
+  redirect_to_root_path;
 end
-
 
 # POST /activities
 def create
-  # @activity = Activity.create!(activity_params)
-  # json_response(@activity, :created)
   @activity = Activity.new(activity_params)
   @activity.save
+  json_response(@activity, :created)
 end
 
 # GET /activities/:id
@@ -40,13 +40,6 @@ end
 private
   def activity_params
     # whitelist params
-    #params.permit(:name, :address, :phone, :intro, :url, :longitude, :latitude, :category)
-    #params.require(:name)
-    # {
-    #   activity: {
-    #     name:, address:, phone:, intro:, url:, longitude:, latitude:, category:
-    #   }
-    # }
     params.require(:activity).permit(:name, :address, :phone, :intro, :url, :longitude, :latitude, :category)
   end
 
