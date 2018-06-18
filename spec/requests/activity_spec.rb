@@ -24,30 +24,29 @@ RSpec.describe 'Activities API', type: :request do
   # Test suite for POST /activities
   describe 'POST /activities' do
     # valid payload
-    let(:valid_attributes) { { activity: { name: 'Sigiriya' } } }
-
+    let(:valid_attributes) { { name: 'Sigiriya' } }
     context 'when the request is valid' do
       before { post '/activities', params: valid_attributes }
 
       it 'creates a activities' do
-        expect(JSON.parse(response.body)).to eq(v) 
+        expect(json['name']).to eq('Sigiriya')
       end
 
-      it 'returns status code 204' do
-        expect(response).to have_http_status(204)
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
       end
     end
 
     context 'when the request is invalid' do
       before { post '/activities' }
 
-      it 'returns status code 400' do
-        expect(response).to have_http_status(400)
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
       end
 
       it 'returns a validation failure message' do
         expect(response.body)
-          .to match(/ActionController::ParameterMissing: param is missing or the value is empty: activity/)
+          .to match("Validation failed: Name can't be blank")
       end
     end
   end

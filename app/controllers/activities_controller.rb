@@ -9,14 +9,15 @@ end
 
 #POST /activities/random
 def create_random
-  RandActivityJob.perform_later
+  #RandActivityJob.perform_later
   redirect_to_root_path;
 end
 
 # POST /activities
 def create
-  @activity = Activity.new(activity_params)
-  @activity.save
+  #@activity = Activity.new(activity_params)
+  #@activity.save
+  @activity = Activity.create!(activity_params)
   json_response(@activity, :created)
 end
 
@@ -40,7 +41,8 @@ end
 private
   def activity_params
     # whitelist params
-    params.require(:activity).permit(:name, :address, :phone, :intro, :url, :longitude, :latitude, :category)
+  #  params.require(:activity).permit(:name, :address, :phone, :intro, :url, :longitude, :latitude, :category)
+    params.permit(:name, :address, :phone, :intro, :url, :longitude, :latitude, :category)
   end
 
   def set_activity

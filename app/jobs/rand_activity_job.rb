@@ -3,5 +3,8 @@ class RandActivityJob < ApplicationJob
 
   def perform(*args)
     # Do something later
+    activity = Activity.new
+    activity.name = Faker::Name.first_name
+    sleep 2
   end
 end
