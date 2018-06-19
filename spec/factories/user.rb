@@ -1,7 +1,7 @@
 
 FactoryBot.define do
   factory :user do
-    username 'foo' #{ Faker::StarWars.character }
+    username { Faker::StarWars.character }
     first_name { Faker::StarWars.character }
     last_name { Faker::StarWars.specie }
     password 'foobar' #{ Faker::Crypto.sha1 }
