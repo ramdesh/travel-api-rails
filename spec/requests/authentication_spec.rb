@@ -17,7 +17,7 @@ RSpec.describe 'Authentication', type: :request do
     end
     let(:invalid_credentials) do
       {
-        username: Faker::StarWars.character,
+        username: Faker::Name.name,
         password: Faker::Internet.password,
         role: Faker::Job.position
       }.to_json

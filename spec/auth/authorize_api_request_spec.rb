@@ -30,7 +30,6 @@ RSpec.describe AuthorizeApiRequest do
         end
       end
 
-      #E
       context 'when invalid token' do
         subject(:invalid_request_obj) do
           # custom helper method `token_generator`
@@ -43,7 +42,6 @@ RSpec.describe AuthorizeApiRequest do
         end
       end
 
-      #E
       context 'when token is expired' do
         let(:header) { { 'Authorization' => expired_token_generator(user.id) } }
         subject(:request_obj) { described_class.new(header) }

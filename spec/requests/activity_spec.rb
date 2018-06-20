@@ -25,32 +25,32 @@ RSpec.describe 'Activities API', type: :request do
   end
 
 # Test suite for GET /activities/:id
-describe 'GET /activities/:id' do
-  before { get "/activities/#{activity_id}", params: {}, headers: headers }
+  describe 'GET /activities/:id' do
+    before { get "/activities/#{activity_id}", params: {}, headers: headers }
 
-  context 'when the record exists' do
-    it 'returns the activities' do
-      expect(json).not_to be_empty
-      #expect(json['activity_id']).to eq(activity_id)
+    context 'when the record exists' do
+      it 'returns the activities' do
+        expect(json).not_to be_empty
+        #expect(json['activity_id']).to eq(activity_id)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
     end
 
-    it 'returns status code 200' do
-      expect(response).to have_http_status(200)
-    end
+    context 'error' do
+      let(:activity_id) { 100 }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/Couldn't find Activity/)
+      end
+    end   
   end
-
-  context 'error' do
-    let(:activity_id) { 100 }
-
-    it 'returns status code 404' do
-      expect(response).to have_http_status(404)
-    end
-
-    it 'returns a not found message' do
-      expect(response.body).to match(/Couldn't find Activity/)
-    end
-  end   
-end
 
   # Test suite for POST /activities
   describe 'POST /activities' do
