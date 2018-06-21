@@ -1,8 +1,8 @@
-class RandActivityJob < ApplicationJob
+class RandHotelJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
-    activity_params = [{name: Faker::Name.name,
+    hotel_params = [{name: Faker::Name.name,
       address: Faker::Address.full_address,
       phone: Faker::PhoneNumber.cell_phone,
       intro: Faker::Lorem.paragraph,
@@ -10,6 +10,6 @@ class RandActivityJob < ApplicationJob
       longitude: Faker::Address.longitude,
       latitude: Faker::Address.latitude,
       category: Faker::Company.type }]
-    @activity = Activity.create!(activity_params)
+    @hotel = Hotel.create!(hotel_params)
   end
 end

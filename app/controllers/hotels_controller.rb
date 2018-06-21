@@ -9,16 +9,7 @@ class HotelsController < ApplicationController
 
   #POST /hotels/random
   def create_random
-    hotel_params = [{name: Faker::Name.name,
-              address: Faker::Address.full_address,
-              phone: Faker::PhoneNumber.cell_phone,
-              intro: Faker::Lorem.paragraph,
-              url: Faker::Internet.url,
-              longitude: Faker::Address.longitude,
-              latitude: Faker::Address.latitude,
-              category: Faker::Company.type }]
-    @hotel = Hotel.create!(hotel_params)
-    json_response(@hotel, :created)
+    RandHotelJob.perform_later
   end
   
   # POST /hotels
