@@ -1,4 +1,4 @@
-rand_activity:
+kinesis_activity:
   cron: "* * * * *"
-  class: "RandActivityJob"
-  queue: default
+  class: "KinesisPushJob"
+  #queue: default

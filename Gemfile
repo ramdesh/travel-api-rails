@@ -22,6 +22,12 @@ gem 'rufus-scheduler', '3.3.0'
 gem 'sidekiq'
 gem 'sidekiq-cron', "~> 0.6.3"
 
+
+#Use Kinesis Client
+gem "multi_json"
+gem "aws-sdk-core"
+gem "aws-sdk"
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
