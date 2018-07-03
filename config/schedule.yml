@@ -1,0 +1,4 @@
+rand_activity:
+  cron: "* * * * *"
+  class: "RandActivityJob"
+  queue: default

@@ -16,8 +16,11 @@ gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 gem 'jwt'
+
 # Use sidekiq
+gem 'rufus-scheduler', '3.3.0'
 gem 'sidekiq'
+gem 'sidekiq-cron', "~> 0.6.3"
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -46,6 +49,7 @@ end
 group :development, :test do
   # rspec-rails - Testing framework
   gem 'rspec-rails', '~> 3.5'
+  # faker - A library for generating fake data. We'll use this to generate test data
   gem 'faker'
 end
 
@@ -54,8 +58,6 @@ group :test do
   gem 'factory_bot_rails', '~> 4.0'
   # shoulda_matchers - Provides RSpec with additional matchers
   gem 'shoulda-matchers', '~> 3.1'
-  # faker - A library for generating fake data. We'll use this to generate test data
-  gem 'faker'
   # database_cleaner - You guessed it! It literally cleans our test database to ensure a clean state in each test suite
   gem 'database_cleaner'
 end
