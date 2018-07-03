@@ -9,8 +9,7 @@ end
 
 #POST /activities/random
 def create_random
-  #RandActivityJob.perform_later
-  redirect_to_root_path;
+  RandActivityJob.perform_later
 end
 
 # POST /activities

@@ -7,6 +7,11 @@ class HotelsController < ApplicationController
     json_response(@hotels)
   end
 
+  #POST /hotels/random
+  def create_random
+    RandHotelJob.perform_later
+  end
+  
   # POST /hotels
   def create
     @hotel = Hotel.create!(hotel_params)

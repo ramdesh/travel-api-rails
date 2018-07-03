@@ -1,12 +1,12 @@
 FactoryBot.define do
     factory :activity do
-      name { Faker::Lorem.sentence }
-      address { Faker::Lorem.sentence }
-      phone { Faker::Lorem.sentence }
-      intro { Faker::Lorem.sentence }
-      url { Faker::Lorem.sentence }
-      longitude { Faker::Lorem.sentence }
-      latitude { Faker::Lorem.sentence }
-      category { Faker::Lorem.sentence }
+      name { Faker::Name.name }
+      address { Faker::Address.full_address }
+      phone { Faker::PhoneNumber.cell_phone }
+      intro { Faker::Lorem.paragraph }
+      url { Faker::Internet.url }
+      longitude { Faker::Address.longitude }
+      latitude { Faker::Address.latitude }
+      category { Faker::Company.type }
     end
   end
