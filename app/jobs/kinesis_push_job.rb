@@ -3,18 +3,16 @@ require 'optparse'
 require 'sidekiq'
 require 'aws-sdk'
 
-class KinesisPushJob #< Sidekiq::Workers
-#  queue_as :default
+class KinesisPushJob 
   include Sidekiq::Worker
 
-  def perform(aws_region = 'us-east-1', stream_name = 'activityStream', sleep_between_puts=0.25, shard_count=nil,timeout=1)
+  def perform(aws_region = 'us-east-1', stream_name = 'activityStream', shard_count=nil)
     kconfig = {}
     kconfig[:region] = aws_region
     kinesis = Aws::Kinesis::Client.new(kconfig)
     
     @stream_name = stream_name
     @shard_count = shard_count
-    @sleep_between_puts = sleep_between_puts
     @kinesis = kinesis
     
     create_stream_if_not_exists
@@ -58,22 +56,12 @@ class KinesisPushJob #< Sidekiq::Workers
       r = @kinesis.put_record(:stream_name => @stream_name,
                              :data => data_blob,
                              :partition_key => activityR["id"].to_s)
-      puts "Put record to shard '#{r[:shard_id]}' : Data : '#{activityR["id"]}'"
+      puts "Put record to shard '#{r[:shard_id]}' : Activity : '#{activityR["id"]}'"
     end
-    puts " ******************************* "    
-    #data = Activity.find(34)
-    
+    puts " ******************************* "        
   end
 
   private
-    def get_data
-      {
-        "time"=>"dfdsf",#{Time.now.to_f}",
-        "sensor"=>"snsr-",#{rand(1_000).to_s.rjust(4,'0')}",
-        "reading"=>"cvcv" #{rand(1_000_000)}"
-      }
-    end
-
     def get_stream_description
       r = @kinesis.describe_stream(:stream_name => @stream_name)
       r[:stream_description]
@@ -94,8 +82,6 @@ if __FILE__ == $0
   aws_region = 'us-east-1'
   stream_name = 'sidekiqStream'
   shard_count = nil
-  sleep_between_puts = 0.1
-  timeout = 5
   # Get and parse options
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: #{File.basename($0)} [options]"
@@ -107,14 +93,6 @@ if __FILE__ == $0
     end
     opts.on("-r REGION_NAME", "--region REGION_NAME", "AWS region name (see http://tinyurl.com/cc9cap7). (Default: SDK default)") do |r|
       aws_region = r
-    end
-    opts.on("-p SLEEP_SECONDS", "--sleep SLEEP_SECONDS", Float, "How long to sleep betweep puts (seconds, can be fractional). (Default #{sleep_between_puts})") do |s|
-      sleep_between_puts = s.to_f
-      raise OptionParser::ParseError.new("SLEEP_SECONDS must be a non-negative number")  unless sleep_between_puts >= 0.0
-    end
-    opts.on("-t TIMEOUT_SECONDS", "--timeout TIMEOUT_SECONDS", Float, "How long to keep running. By default producer keeps running indefinitely. (Default: #{timeout})") do |t|
-      timeout = s.to_f
-      raise OptionParser::ParseError.new("TIMEOUT_SECONDS must be a non-negative number")  unless timeout >= 0.0
     end
     opts.on("-h", "--help", "Prints this help message.") do
       puts opts
@@ -139,7 +117,5 @@ if __FILE__ == $0
 
 
   
-  producer = SampleProducer.new(kinesis, stream_name, sleep_between_puts, shard_count)
-  producer.perform(timeout)
-  
+  producer = SampleProducer.new(kinesis, stream_name, shard_count)
 end
