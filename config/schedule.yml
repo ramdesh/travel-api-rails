@@ -1,4 +1,4 @@
 kinesis_activity:
   cron: "* * * * *"
   class: "KinesisPushJob"
-  #queue: default
+  

@@ -7,7 +7,7 @@ class KinesisPushJob #< Sidekiq::Workers
 #  queue_as :default
   include Sidekiq::Worker
 
-  def perform(aws_region = 'us-east-1', stream_name = 'sidekiqStream', sleep_between_puts=0.25, shard_count=nil,timeout=1)
+  def perform(aws_region = 'us-east-1', stream_name = 'activityStream', sleep_between_puts=0.25, shard_count=nil,timeout=1)
     kconfig = {}
     kconfig[:region] = aws_region
     kinesis = Aws::Kinesis::Client.new(kconfig)
@@ -18,16 +18,8 @@ class KinesisPushJob #< Sidekiq::Workers
     @kinesis = kinesis
     
     create_stream_if_not_exists
-    #start = Time.now
-    t = Time.now
-    #count=0
-    #while (timeout == 0 || (Time.now - start) < timeout) do
-    #  count+=1
-      put_record
-      sleep @sleep_between_puts
-      puts "Loop Time : #{Time.now - t} " #, Count: #{count}"
-    #  t=Time.now
-    #end
+    put_record
+    puts "All records published to Kinesis"
   end
 
   def delete_stream_if_exists
@@ -60,20 +52,25 @@ class KinesisPushJob #< Sidekiq::Workers
   end
 
   def put_record
-    data = get_data
-    data_blob = MultiJson.dump(data)
-    r = @kinesis.put_record(:stream_name => @stream_name,
-                            :data => data_blob,
-                            :partition_key => data["sensor"])
-    puts "Put record to shard '#{r[:shard_id]}' : Data : '#{MultiJson.dump(data)}'"
+    @activity = Activity.all
+    @activity.each do |activityR|
+      data_blob = MultiJson.dump(activityR)
+      r = @kinesis.put_record(:stream_name => @stream_name,
+                             :data => data_blob,
+                             :partition_key => activityR["id"].to_s)
+      puts "Put record to shard '#{r[:shard_id]}' : Data : '#{activityR["id"]}'"
+    end
+    puts " ******************************* "    
+    #data = Activity.find(34)
+    
   end
 
   private
     def get_data
       {
-        "time"=>"#{Time.now.to_f}",
-        "sensor"=>"snsr-#{rand(1_000).to_s.rjust(4,'0')}",
-        "reading"=>"#{rand(1_000_000)}"
+        "time"=>"dfdsf",#{Time.now.to_f}",
+        "sensor"=>"snsr-",#{rand(1_000).to_s.rjust(4,'0')}",
+        "reading"=>"cvcv" #{rand(1_000_000)}"
       }
     end
 
