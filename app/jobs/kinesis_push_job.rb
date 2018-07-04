@@ -6,16 +6,21 @@ require 'aws-sdk'
 class KinesisPushJob 
   include Sidekiq::Worker
 
-  def perform(aws_region = 'us-east-1', stream_name = 'activityStream', shard_count=nil)
+  def perform(aws_region = 'us-east-1', activity_stream_name = 'activityStream', hotel_stream_name= 'hotelStream', shard_count=nil)
     kconfig = {}
     kconfig[:region] = aws_region
     kinesis = Aws::Kinesis::Client.new(kconfig)
     
-    @stream_name = stream_name
     @shard_count = shard_count
     @kinesis = kinesis
     
+    @stream_name = activity_stream_name
     create_stream_if_not_exists
+
+    @stream_name = hotel_stream_name
+    create_stream_if_not_exists
+
+    @activity_stream_name = activity_stream_name
     put_record
     puts "All records published to Kinesis"
   end
@@ -53,12 +58,21 @@ class KinesisPushJob
     @activity = Activity.all
     @activity.each do |activityR|
       data_blob = MultiJson.dump(activityR)
-      r = @kinesis.put_record(:stream_name => @stream_name,
+      r = @kinesis.put_record(:stream_name => @activity_stream_name,
                              :data => data_blob,
                              :partition_key => activityR["id"].to_s)
       puts "Put record to shard '#{r[:shard_id]}' : Activity : '#{activityR["id"]}'"
     end
-    puts " ******************************* "        
+    puts " ******************************* "
+    @hotel = Hotel.all
+    @hotel.each do |hotelR|
+      data_blob = MultiJson.dump(hotelR)
+      r = @kinesis.put_record(:stream_name => @stream_name,
+                             :data => data_blob,
+                             :partition_key => hotelR["id"].to_s)
+      puts "Put record to shard '#{r[:shard_id]}' : Hotel : '#{hotelR["id"]}'"
+    end
+    
   end
 
   private
